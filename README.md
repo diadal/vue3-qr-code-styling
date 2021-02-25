@@ -1,4 +1,3 @@
-[![Build Status][travis-image]][travis-url]
 [![Known Vulnerabilities](https://snyk.io/test/github/diadal/vue3-qr-code-styling/badge.svg)](https://snyk.io/test/github/diadal/vue3-qr-code-styling)
 # Vue3 QR Code Styling
 [![Version](https://img.shields.io/npm/v/vue3-qr-code-styling.svg)](https://www.npmjs.org/package/vue3-qr-code-styling)
@@ -215,8 +214,6 @@ Property |Type                          |Default Value|Description
 name     |string                        |`'qr'`       |Name of the downloaded file
 extension|string (`'png' 'jpeg' 'webp'`)|`'png'`      |File extension
 
-[travis-image]: https://travis-ci.com/diadal/vue3-qr-code-styling.svg?branch=master
-[travis-url]: https://travis-ci.com/diadal/vue3-qr-code-styling
 
 if any issue [check](https://github.com/diadal/vue3-qr-code-styling/issues)
 
