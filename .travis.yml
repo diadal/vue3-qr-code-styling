@@ -7,5 +7,4 @@ node_js:
   - "10"
   - "8"
   - "6"
-script: node build/build.js
-sudo: false
+script: node src/index.js
