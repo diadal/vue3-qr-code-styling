@@ -65,7 +65,7 @@ export default defineComponent({
   name: 'VueQr3',
   components: {
     VueQr3: defineAsyncComponent(() =>
-      Promise.resolve(import('vue3-qr-code-styling/vue3-qr-code-styling.vue'))
+      Promise.resolve(import('vue3-qr-code-styling'))
     )
   },
 
