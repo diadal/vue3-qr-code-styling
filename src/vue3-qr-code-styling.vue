@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts">
-import VQRCodeStyling from './index'
+import VQRCodeStyling from './app'
 
 import {
   defineComponent,
@@ -93,13 +93,12 @@ export default defineComponent({
 
   },
 
-  name: 'vue-qr-code-styling',
+  name: 'vue3-qr-code-styling',
 
   setup (props) {
     const vqr = ref<HTMLElement>()
     const fileExt = ref<string>(props.fileExt)
-    const download = ref(props.download)
-    const qrCode = new VQRCodeStyling({
+    const qrCode:any = new VQRCodeStyling({
       width: props.width,
       height: props.height,
       data: props.data,
@@ -123,7 +122,6 @@ export default defineComponent({
     })
     onBeforeUnmount(() => {
       vqr.value = undefined
-      download.value = false
     })
 
     onBeforeUpdate(() => {
@@ -133,7 +131,6 @@ export default defineComponent({
       qrCode,
       vqr,
       onDownloadClick
-      // download
     }
   }
 })

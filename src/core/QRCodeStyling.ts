@@ -38,11 +38,11 @@ export default class QRCodeStyling {
       return;
     }
 
-    this._qr = qrcode(this._options.qrOptions.typeNumber, this._options.qrOptions.errorCorrectionLevel);
+    this._qr =<QRCode> qrcode(this._options.qrOptions.typeNumber, this._options.qrOptions.errorCorrectionLevel);
     this._qr.addData(this._options.data, this._options.qrOptions.mode || getMode(this._options.data));
     this._qr.make();
     this._canvas = new QRCanvas(this._options);
-    this._drawingPromise = this._canvas.drawQR(this._qr);
+    this._drawingPromise = this._canvas.drawQR(<QRCode>this._qr);
     this.append(this._container);
   }
 

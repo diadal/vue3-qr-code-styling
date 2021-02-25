@@ -12,32 +12,29 @@ module.exports = {
   output: {
     path: libPath,
     filename: "index.js",
-    library: "VQRCodeStyling",
-    libraryTarget: "umd",
-    libraryExport: "default"
   },
   module: {
     rules: [
-      {
-        test: /\.ts$/,
-        loader: "ts-loader",
-        exclude: /node_modules/
-      },
-      {
+       {
         test: /\.vue$/,
-        loader: "vue-loader",
+        use: 'vue-loader',
         exclude: /node_modules/
       },
       {
-        enforce: "pre",
         test: /\.ts$/,
-        loader: "eslint-loader",
-        exclude: /node_modules/
-      }
+        loader: 'ts-loader',
+        exclude: /node_modules/,
+        options: {
+          appendTsSuffixTo: [/\.vue$/],
+        }
+      },
     ]
   },
-  plugins: [new VueLoaderPlugin(), new CleanWebpackPlugin()],
+  plugins: [new VueLoaderPlugin()],
   resolve: {
-    extensions: [".ts", ".js", ".vue"]
-  }
+    extensions: ['.ts', '.js', '.vue', '.json'],
+    alias: {
+      'vue': '@vue/runtime-dom'
+    }
+  },
 };
