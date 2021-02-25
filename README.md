@@ -215,8 +215,8 @@ Property |Type                          |Default Value|Description
 name     |string                        |`'qr'`       |Name of the downloaded file
 extension|string (`'png' 'jpeg' 'webp'`)|`'png'`      |File extension
 
-[travis-image]: https://travis-ci.org/diadal/vue3-qr-code-styling.svg?branch=master
-[travis-url]: https://travis-ci.org/diadal/vue3-qr-code-styling
+[travis-image]: https://travis-ci.com/diadal/vue3-qr-code-styling.svg?branch=master
+[travis-url]: https://travis-ci.com/diadal/vue3-qr-code-styling
 
 if any issue [check](https://github.com/diadal/vue3-qr-code-styling/issues)
 
