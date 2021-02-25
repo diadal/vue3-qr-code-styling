@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+  - "node"
+  - "13"
+  - "12"
+  - "11"
+  - "10"
+  - "8"
+  - "6"
+script: node build/build.js
+sudo: false
