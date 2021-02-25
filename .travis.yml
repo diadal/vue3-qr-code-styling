@@ -3,5 +3,5 @@
   "os": ["linux"],
   "dist": "xenial",
   "node_js": ["node", "13", "12", "11", "10", "8", "6"],
-  "script": ["node src/index.js"]
+  "script": ["node lib/index.js"]
 }
