@@ -1,11 +1,6 @@
 [![Build Status][travis-image]][travis-url]
 [![Known Vulnerabilities](https://snyk.io/test/github/diadal/vue3-qr-code-styling/badge.svg)](https://snyk.io/test/github/diadal/vue3-qr-code-styling)
-
-
-
-
-
-# QR Code Styling
+# Vue3 QR Code Styling
 [![Version](https://img.shields.io/npm/v/vue3-qr-code-styling.svg)](https://www.npmjs.org/package/vue3-qr-code-styling)
 
 JavaScript library for generating QR codes with a logo and styling.
@@ -71,7 +66,7 @@ export default defineComponent({
   name: 'VueQr3',
   components: {
     VueQr3: defineAsyncComponent(() =>
-      Promise.resolve(import('vue3-qr-code-styling'))
+      Promise.resolve(import('vue3-qr-code-styling/vue3-qr-code-styling.vue'))
     )
   },
 
