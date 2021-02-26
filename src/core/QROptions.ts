@@ -1,5 +1,5 @@
-import qrTypes from "../constants/qrTypes";
-import errorCorrectionLevels from "../constants/errorCorrectionLevels";
+import qrTypes from '../constants/qrTypes'
+import errorCorrectionLevels from '../constants/errorCorrectionLevels'
 import {
   DotType,
   GradientType,
@@ -8,7 +8,7 @@ import {
   TypeNumber,
   ErrorCorrectionLevel,
   Mode
-} from "../types";
+} from '../types'
 
 export type Gradient = {
   type: GradientType;
@@ -86,7 +86,7 @@ export interface RequiredOptions extends Options {
 const defaultOptions: RequiredOptions = {
   width: 300,
   height: 300,
-  data: "",
+  data: '',
   margin: 0,
   qrOptions: {
     typeNumber: qrTypes[0],
@@ -100,12 +100,12 @@ const defaultOptions: RequiredOptions = {
     margin: 0
   },
   dotsOptions: {
-    type: "square",
-    color: "#000"
+    type: 'square',
+    color: '#000'
   },
   backgroundOptions: {
-    color: "#fff"
+    color: '#fff'
   }
-};
+}
 
-export default defaultOptions;
+export default defaultOptions

@@ -1,4 +1,3 @@
-import VQRCodeStyling from "./index";
 declare const _default: import("vue").DefineComponent<
   {
     width: {
@@ -84,10 +83,16 @@ declare const _default: import("vue").DefineComponent<
       type: BooleanConstructor;
       default: boolean;
     };
+    refer: {
+      type: {
+        new (): HTMLElement;
+        prototype: HTMLElement;
+      };
+      required: true;
+    };
   },
   {
-    qrCode: VQRCodeStyling;
-    vqr: import("vue").Ref<HTMLElement | undefined>;
+    qrCode: any;
     onDownloadClick: () => void;
   },
   unknown,
@@ -114,6 +119,7 @@ declare const _default: import("vue").DefineComponent<
       cornersDotOptions: Record<string, any>;
       fileExt: string;
       download: boolean;
+      refer: HTMLElement;
     } & {}
   >,
   {

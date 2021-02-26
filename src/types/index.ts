@@ -3,11 +3,11 @@ export interface UnknownObject {
   [key: string]: any;
 }
 
-export type DotType = "dots" | "rounded" | "classy" | "classy-rounded" | "square" | "extra-rounded";
-export type CornerDotType = "dot" | "square";
-export type CornerSquareType = "dot" | "square" | "extra-rounded";
+export type DotType = 'dots' | 'rounded' | 'classy' | 'classy-rounded' | 'square' | 'extra-rounded';
+export type CornerDotType = 'dot' | 'square';
+export type CornerSquareType = 'dot' | 'square' | 'extra-rounded';
 export type Extension = string;
-export type GradientType = "radial" | "linear";
+export type GradientType = 'radial' | 'linear';
 
 export interface DotTypes {
   [key: string]: DotType;
@@ -68,8 +68,8 @@ export type TypeNumber =
   | 39
   | 40;
 
-export type ErrorCorrectionLevel = "L" | "M" | "Q" | "H";
-export type Mode = "Numeric" | "Alphanumeric" | "Byte" | "Kanji";
+export type ErrorCorrectionLevel = 'L' | 'M' | 'Q' | 'H';
+export type Mode = 'Numeric' | 'Alphanumeric' | 'Byte' | 'Kanji';
 export interface QRCode {
   addData(data: string, mode?: Mode): void;
   make(): void;

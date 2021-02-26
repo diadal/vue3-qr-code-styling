@@ -1,5 +1,7 @@
 [![Known Vulnerabilities](https://snyk.io/test/github/diadal/vue3-qr-code-styling/badge.svg)](https://snyk.io/test/github/diadal/vue3-qr-code-styling)
+
 # Vue3 QR Code Styling
+
 [![Version](https://img.shields.io/npm/v/vue3-qr-code-styling.svg)](https://www.npmjs.org/package/vue3-qr-code-styling)
 
 JavaScript library for generating QR codes with a logo and styling.
@@ -7,7 +9,9 @@ JavaScript library for generating QR codes with a logo and styling.
 this clone copy of https://qr-code-styling.com
 
 If you have issues / suggestions / notes / questions, please open an issue or contact me. Let's create a cool library together.
+
 ### Examples
+
 <p float="left">
 <img style="display:inline-block" src="https://raw.githubusercontent.com/diadal/vue3-qr-code-styling/master/src/assets/facebook_example_new.png" width="240" />
 <img style="display:inline-block" src="https://raw.githubusercontent.com/diadal/vue3-qr-code-styling/master/src/assets/qr_code_example.png" width="240" />
@@ -50,14 +54,18 @@ npm install vue3-qr-code-styling
           fileExt="png"
           :download="true"
           myclass="my-qur"
+          imgclass="img-qr"
           downloadButton="my-button"
-        ></VueQr3>
+          :downloadOptions="{ name: 'vqr', extension: 'png' }"
+        >
+    </VueQr3>
   </div>
 </template>
 
 <script lang="ts">
 import {
   defineComponent,
+  onBeforeUnmount,
   defineAsyncComponent
 } from 'vue'
 
@@ -68,11 +76,8 @@ export default defineComponent({
       Promise.resolve(import('vue3-qr-code-styling'))
     )
   },
-
   setup () {
-  
     return {
-     
     }
   }
 })
@@ -86,76 +91,82 @@ export default defineComponent({
 
 ### API Documentation
 
-#### QRCodeStyling instance
-`new QRCodeStyling(options) => QRCodeStyling`
+#### VQRCodeStyling instance
 
-Param  |Type  |Description
--------|------|------------
-options|object|Init object
+`new VQRCodeStyling(options) => VQRCodeStyling`
+
+| Param   | Type   | Description |
+| ------- | ------ | ----------- |
+| options | object | Init object |
 
 `options` structure
 
-Property               |Type  |Default Value|Description
------------------------|------|-------------|-----------------------------------------------------
-width                  |number|`300`        |Size of canvas
-height                 |number|`300`        |Size of canvas
-data                   |string|             |The date will be encoded to the QR code
-image                  |string|             |The image will be copied to the center of the QR code
-margin                 |number|`0`          |Margin around canvas
-qrOptions              |object|             |Options will be passed to `qrcode-generator` lib
-imageOptions           |object|             |Specific image options, details see below
-dotsOptions            |object|             |Dots styling options
-cornersSquareOptions   |object|             |Square in the corners styling options
-cornersDotOptionsHelper|object|             |Dots in the corners styling options
-backgroundOptions      |object|             |QR background styling options
+| Property                | Type   | Default Value | Description                                           |
+| ----------------------- | ------ | ------------- | ----------------------------------------------------- |
+| width                   | number | `300`         | Size of canvas                                        |
+| height                  | number | `300`         | Size of canvas                                        |
+| download                | boolean| false         | To endable download button                            |
+| myclass                 | string | ''            | Image DIV class                                       |
+| imgclass                | string | ''            | Image class                                           |
+| downloadButton          | string | ''            | download button class                                 |
+| downloadOptions         | object |               | download option name and extension                    |
+| data                    | string |               | The date will be encoded to the QR code               |
+| image                   | string |               | The image will be copied to the center of the QR code |
+| margin                  | number | `0`           | Margin around canvas                                  |
+| qrOptions               | object |               | Options will be passed to `qrcode-generator` lib      |
+| imageOptions            | object |               | Specific image options, details see below             |
+| dotsOptions             | object |               | Dots styling options                                  |
+| cornersSquareOptions    | object |               | Square in the corners styling options                 |
+| cornersDotOptionsHelper | object |               | Dots in the corners styling options                   |
+| backgroundOptions       | object |               | QR background styling options                         |
 
 `options.qrOptions` structure
 
-Property            |Type                                              |Default Value
---------------------|--------------------------------------------------|-------------
-typeNumber          |number (`0 - 40`)                                 |`0`
-mode                |string (`'Numeric' 'Alphanumeric' 'Byte' 'Kanji'`)|
-errorCorrectionLevel|string (`'L' 'M' 'Q' 'H'`)                        |`'Q'`
+| Property             | Type                                               | Default Value |
+| -------------------- | -------------------------------------------------- | ------------- |
+| typeNumber           | number (`0 - 40`)                                  | `0`           |
+| mode                 | string (`'Numeric' 'Alphanumeric' 'Byte' 'Kanji'`) |
+| errorCorrectionLevel | string (`'L' 'M' 'Q' 'H'`)                         | `'Q'`         |
 
 `options.imageOptions` structure
 
-Property          |Type                                   |Default Value|Description
-------------------|---------------------------------------|-------------|------------------------------------------------------------------------------
-hideBackgroundDots|boolean                                |`true`       |Hide all dots covered by the image
-imageSize         |number                                 |`0.4`        |Coefficient of the image size. Not recommended to use ove 0.5. Lower is better
-margin            |number                                 |`0`          |Margin of the image in px
-crossOrigin       |string(`'anonymous' 'use-credentials'`)|             |Set "anonymous" if you want to download QR code from other origins.
+| Property           | Type                                    | Default Value | Description                                                                    |
+| ------------------ | --------------------------------------- | ------------- | ------------------------------------------------------------------------------ |
+| hideBackgroundDots | boolean                                 | `true`        | Hide all dots covered by the image                                             |
+| imageSize          | number                                  | `0.4`         | Coefficient of the image size. Not recommended to use ove 0.5. Lower is better |
+| margin             | number                                  | `0`           | Margin of the image in px                                                      |
+| crossOrigin        | string(`'anonymous' 'use-credentials'`) |               | Set "anonymous" if you want to download QR code from other origins.            |
 
 `options.dotsOptions` structure
 
-Property|Type                                                                          |Default Value|Description
---------|------------------------------------------------------------------------------|-------------|-------------------
-color   |string                                                                        |`'#000'`     |Color of QR dots
-gradient|object                                                                        |             |Gradient of QR dots
-type    |string (`'rounded' 'dots' 'classy' 'classy-rounded' 'square' 'extra-rounded'`)|`'square'`   |Style of QR dots
+| Property | Type                                                                           | Default Value | Description         |
+| -------- | ------------------------------------------------------------------------------ | ------------- | ------------------- |
+| color    | string                                                                         | `'#000'`      | Color of QR dots    |
+| gradient | object                                                                         |               | Gradient of QR dots |
+| type     | string (`'rounded' 'dots' 'classy' 'classy-rounded' 'square' 'extra-rounded'`) | `'square'`    | Style of QR dots    |
 
 `options.backgroundOptions` structure
 
-Property|Type  |Default Value
---------|------|-------------
-color   |string|`'#fff'`
-gradient|object|
+| Property | Type   | Default Value |
+| -------- | ------ | ------------- |
+| color    | string | `'#fff'`      |
+| gradient | object |
 
 `options.cornersSquareOptions` structure
 
-Property|Type                                     |Default Value|Description
---------|-----------------------------------------|-------------|-----------------
-color   |string                                   |             |Color of Corners Square
-gradient|object                                   |             |Gradient of Corners Square
-type    |string (`'dot' 'square' 'extra-rounded'`)|             |Style of Corners Square
+| Property | Type                                      | Default Value | Description                |
+| -------- | ----------------------------------------- | ------------- | -------------------------- |
+| color    | string                                    |               | Color of Corners Square    |
+| gradient | object                                    |               | Gradient of Corners Square |
+| type     | string (`'dot' 'square' 'extra-rounded'`) |               | Style of Corners Square    |
 
 `options.cornersDotOptions` structure
 
-Property|Type                     |Default Value|Description
---------|-------------------------|-------------|-----------------
-color   |string                   |             |Color of Corners Dot
-gradient|object                   |             |Gradient of Corners Dot
-type    |string (`'dot' 'square'`)|             |Style of Corners Dot
+| Property | Type                      | Default Value | Description             |
+| -------- | ------------------------- | ------------- | ----------------------- |
+| color    | string                    |               | Color of Corners Dot    |
+| gradient | object                    |               | Gradient of Corners Dot |
+| type     | string (`'dot' 'square'`) |               | Style of Corners Dot    |
 
 Gradient structure
 
@@ -167,11 +178,11 @@ Gradient structure
 
 `options.cornersDotOptions.gradient`
 
-Property  |Type                        |Default Value|Description
-----------|----------------------------|-------------|---------------------------------------------------------
-type      |string (`'linear' 'radial'`)|"linear"     |Type of gradient spread
-rotation  |number                      |0            |Rotation of gradient in radians (Math.PI === 180 degrees)
-colorStops|array of objects            |             |Gradient colors. Example `[{ offset: 0, color: 'blue' }, {  offset: 1, color: 'red' }]`
+| Property   | Type                         | Default Value | Description                                                                            |
+| ---------- | ---------------------------- | ------------- | -------------------------------------------------------------------------------------- |
+| type       | string (`'linear' 'radial'`) | "linear"      | Type of gradient spread                                                                |
+| rotation   | number                       | 0             | Rotation of gradient in radians (Math.PI === 180 degrees)                              |
+| colorStops | array of objects             |               | Gradient colors. Example `[{ offset: 0, color: 'blue' }, { offset: 1, color: 'red' }]` |
 
 Gradient colorStops structure
 
@@ -183,45 +194,42 @@ Gradient colorStops structure
 
 `options.cornersDotOptions.gradient.colorStops[]`
 
-Property|Type            |Default Value|Description
---------|----------------|-------------|-----------------------------------
-offset  |number (`0 - 1`)|             |Position of color in gradient range
-color   |string          |             |Color of stop in gradient range
+| Property | Type             | Default Value | Description                         |
+| -------- | ---------------- | ------------- | ----------------------------------- |
+| offset   | number (`0 - 1`) |               | Position of color in gradient range |
+| color    | string           |               | Color of stop in gradient range     |
 
-#### QRCodeStyling methods
-`QRCodeStyling.append(container) => void`
+#### VQRCodeStyling methods
 
-Param    |Type       |Description
----------|-----------|-----------
-container|DOM element|This container will be used for appending of the QR code
+`VQRCodeStyling.append(container) => void`
 
-`QRCodeStyling.update(options) => void`
+| Param     | Type        | Description                                              |
+| --------- | ----------- | -------------------------------------------------------- |
+| container | DOM element | This container will be used for appending of the QR code |
 
-Param  |Type  |Description
--------|------|--------------------------------------
-options|object|The same options as for initialization
+`VQRCodeStyling.update(options) => void`
 
-`QRCodeStyling.download(downloadOptions) => void`
+| Param   | Type   | Description                            |
+| ------- | ------ | -------------------------------------- |
+| options | object | The same options as for initialization |
 
-Param          |Type  |Description
----------------|------|------------
-downloadOptions|object|Options with extension and name of file (not required)
+`VQRCodeStyling.download(downloadOptions) => void`
+
+| Param           | Type   | Description                                            |
+| --------------- | ------ | ------------------------------------------------------ |
+| downloadOptions | object | Options with extension and name of file (not required) |
 
 `downloadOptions` structure
 
-Property |Type                          |Default Value|Description
----------|------------------------------|-------------|-----------------------------------------------------
-name     |string                        |`'qr'`       |Name of the downloaded file
-extension|string (`'png' 'jpeg' 'webp'`)|`'png'`      |File extension
-
+| Property  | Type                           | Default Value | Description                 |
+| --------- | ------------------------------ | ------------- | --------------------------- |
+| name      | string                         | `'qr'`        | Name of the downloaded file |
+| extension | string (`'png' 'jpeg' 'webp'`) | `'png'`       | File extension              |
 
 if any issue [check](https://github.com/diadal/vue3-qr-code-styling/issues)
 
-
 _also you can buy me a coffee @ [Patreon](https://www.patreon.com/diadal)_
-
 
 ### License
 
 [MIT License](https://raw.githubusercontent.com/diadal/vue3-qr-code-styling/master/LICENSE). Copyright (c) 2021 Diadal Nig
-

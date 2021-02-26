@@ -1,27 +1,29 @@
 <template>
-<div>
-   <div ref="vqr" :class="myclass" />
-   <button @click="onDownloadClick"  v-if="download" :class="downloadButton">Download</button>
-   </div>
+  <div>
+    <div v-if="imageUrl" :class="myclass">
+      <img :src="imageUrl" :class="imgclass" />
+    </div>
+    <button @click="onDownloadClick" v-if="download" :class="downloadButton">
+      Download
+    </button>
+  </div>
 </template>
 
 <script lang="ts">
-import VQRCodeStyling from './app'
+import VQRCodeStyling from './index'
 
-import {
-  defineComponent,
-  onBeforeUpdate,
-  onBeforeUnmount,
-  ref,
-  onMounted
-} from 'vue'
+import { defineComponent, ref, onMounted, onBeforeUnmount } from 'vue'
+import QRCodeStyling from './core/QRCodeStyling'
 
 export default defineComponent({
-
   props: {
     width: {
       type: Number,
       default: 300
+    },
+    imgclass: {
+      type: String,
+      default: ''
     },
     myclass: {
       type: String,
@@ -89,16 +91,20 @@ export default defineComponent({
     download: {
       type: Boolean,
       default: false
-    }
+    },
 
+    downloadOptions: {
+      type: Object,
+      default: () => ({ name: 'vqr', extension: 'png' })
+    }
   },
 
   name: 'vue3-qr-code-styling',
 
   setup (props) {
-    const vqr = ref<HTMLElement>()
+    console.log('props', props)
     const fileExt = ref<string>(props.fileExt)
-    const qrCode:any = new VQRCodeStyling({
+    const qrCode: QRCodeStyling = new VQRCodeStyling({
       width: props.width,
       height: props.height,
       data: props.data,
@@ -111,26 +117,23 @@ export default defineComponent({
       cornersDotOptions: props.cornersDotOptions
     })
 
+    const imageUrl = ref<string>('')
+
     const onDownloadClick = () => {
-      qrCode.download({
-        extension: fileExt.value
-      })
+      qrCode.download(props.downloadOptions)
     }
 
-    onMounted(() => {
-      qrCode.append(vqr.value)
-    })
-    onBeforeUnmount(() => {
-      vqr.value = undefined
+    onMounted(async () => {
+      imageUrl.value = await qrCode.getImageUrl(fileExt.value)
     })
 
-    onBeforeUpdate(() => {
-      vqr.value = undefined
+    onBeforeUnmount(() => {
+      imageUrl.value = ''
     })
     return {
       qrCode,
-      vqr,
-      onDownloadClick
+      onDownloadClick,
+      imageUrl
     }
   }
 })

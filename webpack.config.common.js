@@ -12,6 +12,9 @@ module.exports = {
   output: {
     path: libPath,
     filename: "index.js",
+    library: "VQRCodeStyling",
+    libraryTarget: "umd",
+    libraryExport: "default"
   },
   module: {
     rules: [
@@ -30,9 +33,9 @@ module.exports = {
       },
     ]
   },
-  plugins: [new VueLoaderPlugin()],
+  plugins: [new VueLoaderPlugin(), new CleanWebpackPlugin()],
   resolve: {
-    extensions: ['.ts', '.js', '.vue', '.json'],
+    extensions: ['.ts', '.js', '.vue'],
     alias: {
       'vue': '@vue/runtime-dom'
     }

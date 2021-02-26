@@ -1,3 +1,11 @@
-import VueQr3 from "./vue3-qr-code-styling.vue";
+import VQRCodeStyling from "./core/QRCodeStyling";
+import dotTypes from "./constants/dotTypes";
+import cornerDotTypes from "./constants/cornerDotTypes";
+import cornerSquareTypes from "./constants/cornerSquareTypes";
+import errorCorrectionLevels from "./constants/errorCorrectionLevels";
+import errorCorrectionPercents from "./constants/errorCorrectionPercents";
+import modes from "./constants/modes";
+import qrTypes from "./constants/qrTypes";
 
-export default VueQr3;
+export { dotTypes, cornerDotTypes, cornerSquareTypes, errorCorrectionLevels, errorCorrectionPercents, modes, qrTypes };
+export default VQRCodeStyling;

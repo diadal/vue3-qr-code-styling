@@ -1,11 +1,11 @@
 {
   "name": "vue3-qr-code-styling",
-  "version": "1.4.0",
-  "description": "Add a style and an image to your QR code Vue",
-  "main": "src/index.js",
-  "types": "src/index.d.ts",
+  "version": "1.4.4",
+  "description": "Add a style and an image to your QR code Vue3",
+  "main": "src/vue3-qr-code-styling.vue",
+  "types": "src/vue3-qr-code-styling.d.ts",
   "files": [
-    "lib"
+    "src"
   ],
   "dependencies": {
     "@vue/compiler-sfc": "^3.0.6",
@@ -36,10 +36,9 @@
     "webpack-merge": "^5.7.3"
   },
   "scripts": {
-    "build": "webpack --mode=production --config webpack.config.build.js",
+    "build": "webpack --mode=production --config webpack.config.build.js && copyfiles -f ./src/*.vue lib",
     "build:dev": "webpack --mode=development --config webpack.config.build.js",
-    "test": "jest",
-    "start": "webpack serve --open --config webpack.config.dev-server.js"
+    "test": "jest"
   },
   "repository": {
     "type": "git",

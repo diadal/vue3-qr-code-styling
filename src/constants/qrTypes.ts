@@ -1,13 +1,13 @@
-import { TypeNumber } from "../types";
+import { TypeNumber } from '../types'
 
 interface TypesMap {
   [key: number]: TypeNumber;
 }
 
-const qrTypes: TypesMap = {};
+const qrTypes: TypesMap = {}
 
 for (let type = 0; type <= 40; type++) {
-  qrTypes[type] = type as TypeNumber;
+  qrTypes[type] = type as TypeNumber
 }
 
 // 0 types is autodetect
@@ -19,4 +19,4 @@ for (let type = 0; type <= 40; type++) {
 //     40: 40
 // }
 
-export default qrTypes;
+export default qrTypes
