@@ -1,9 +1,9 @@
 {
   "name": "vue3-qr-code-styling",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "Add a style and an image to your QR code Vue3",
-  "main": "src/vue3-qr-code-styling.vue",
-  "types": "src/vue3-qr-code-styling.d.ts",
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
   "files": [
     "src"
   ],

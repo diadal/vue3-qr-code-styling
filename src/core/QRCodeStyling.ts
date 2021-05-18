@@ -42,7 +42,6 @@ export default class QRCodeStyling {
     this._qr.addData(this._options.data, this._options.qrOptions.mode || getMode(this._options.data))
     this._qr.make()
     this._canvas = new QRCanvas(this._options)
-    console.log('this._qr', this._qr)
     this._drawingPromise = this._canvas.drawQR(this._qr)
     this.append(this._container)
   }

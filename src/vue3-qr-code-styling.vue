@@ -3,14 +3,18 @@
     <div v-if="imageUrl" :class="myclass">
       <img :src="imageUrl" :class="imgclass" />
     </div>
-    <button @click="onDownloadClick" v-if="download" :class="downloadButton">
-      Download
-    </button>
+    <div v-if="download">
+      <button @click="onDownloadClick" :class="downloadButton">
+        {{ ButtonName }}
+      </button>
+      <br />
+      <br />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import VQRCodeStyling from './index'
+import VQRCodeStyling from './app'
 
 import { defineComponent, ref, onMounted, onBeforeUnmount } from 'vue'
 import QRCodeStyling from './core/QRCodeStyling'
@@ -32,6 +36,10 @@ export default defineComponent({
     downloadButton: {
       type: String,
       default: ''
+    },
+    ButtonName: {
+      type: String,
+      default: 'Download'
     },
     height: {
       type: Number,
@@ -101,8 +109,7 @@ export default defineComponent({
 
   name: 'vue3-qr-code-styling',
 
-  setup (props) {
-    console.log('props', props)
+  setup(props) {
     const fileExt = ref<string>(props.fileExt)
     const qrCode: QRCodeStyling = new VQRCodeStyling({
       width: props.width,
