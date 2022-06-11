@@ -1,6 +1,6 @@
 {
-  "name": "vue3-qr-code-styling",
-  "version": "1.4.5",
+  "name": "@diadal/vue3-qr-code-styling",
+  "version": "1.4.6",
   "description": "Add a style and an image to your QR code Vue3",
   "main": "src/index.js",
   "types": "src/index.d.ts",
@@ -61,6 +61,7 @@
     "design"
   ],
   "author": "Diadal <info@diadal.com.ng>",
+  "private": false,
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/diadal/vue3-qr-code-styling/issues"

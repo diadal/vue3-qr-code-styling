@@ -21,7 +21,9 @@ If you have issues / suggestions / notes / questions, please open an issue or co
 ### Installation
 
 ```
-npm install vue3-qr-code-styling
+npm install @diadal/vue3-qr-code-styling
+or
+yarn add @diadal/vue3-qr-code-styling
 ```
 
 ### Usage
