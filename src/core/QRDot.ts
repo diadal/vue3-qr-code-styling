@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import dotTypes from '../constants/dotTypes'
 import { DotType } from '../types'
 
@@ -71,10 +70,10 @@ export default class QRDot {
     const cy = y + size / 2
 
     context.translate(cx, cy)
-    rotation && context.rotate(rotation)
+    if (rotation) context.rotate(rotation)
     draw()
     context.closePath()
-    rotation && context.rotate(-rotation)
+    if (rotation) context.rotate(-rotation)
     context.translate(-cx, -cy)
   }
 
@@ -181,99 +180,55 @@ export default class QRDot {
     this._basicSquare({ x, y, size, context, rotation: 0 })
   }
 
-  _drawRounded ({ x, y, size, context, getNeighbor }: DrawArgs): void {
-    const leftNeighbor = +getNeighbor(-1, 0)
-    const rightNeighbor = +getNeighbor(1, 0)
-    const topNeighbor = +getNeighbor(0, -1)
-    const bottomNeighbor = +getNeighbor(0, 1)
+  // Rotation for a tile with two adjacent neighbors (an inner corner).
+  static _cornerRotation (left: number, right: number, top: number, bottom: number): number {
+    if (left && top) return Math.PI / 2
+    if (top && right) return Math.PI
+    if (right && bottom) return -Math.PI / 2
+    return 0
+  }
 
-    const neighborsCount = leftNeighbor + rightNeighbor + topNeighbor + bottomNeighbor
+  // Rotation for a tile with a single neighbor (a rounded side).
+  static _sideRotation (right: number, top: number, bottom: number): number {
+    if (top) return Math.PI / 2
+    if (right) return Math.PI
+    if (bottom) return -Math.PI / 2
+    return 0
+  }
+
+  _drawRounded ({ x, y, size, context, getNeighbor }: DrawArgs): void {
+    const left = +getNeighbor(-1, 0)
+    const right = +getNeighbor(1, 0)
+    const top = +getNeighbor(0, -1)
+    const bottom = +getNeighbor(0, 1)
+    const neighborsCount = left + right + top + bottom
 
     if (neighborsCount === 0) {
       this._basicDot({ x, y, size, context, rotation: 0 })
-      return
-    }
-
-    if (neighborsCount > 2 || (leftNeighbor && rightNeighbor) || (topNeighbor && bottomNeighbor)) {
+    } else if (neighborsCount > 2 || (left && right) || (top && bottom)) {
       this._basicSquare({ x, y, size, context, rotation: 0 })
-      return
-    }
-
-    if (neighborsCount === 2) {
-      let rotation = 0
-
-      if (leftNeighbor && topNeighbor) {
-        rotation = Math.PI / 2
-      } else if (topNeighbor && rightNeighbor) {
-        rotation = Math.PI
-      } else if (rightNeighbor && bottomNeighbor) {
-        rotation = -Math.PI / 2
-      }
-
-      this._basicCornerRounded({ x, y, size, context, rotation })
-      return
-    }
-
-    if (neighborsCount === 1) {
-      let rotation = 0
-
-      if (topNeighbor) {
-        rotation = Math.PI / 2
-      } else if (rightNeighbor) {
-        rotation = Math.PI
-      } else if (bottomNeighbor) {
-        rotation = -Math.PI / 2
-      }
-
-      this._basicSideRounded({ x, y, size, context, rotation })
+    } else if (neighborsCount === 2) {
+      this._basicCornerRounded({ x, y, size, context, rotation: QRDot._cornerRotation(left, right, top, bottom) })
+    } else if (neighborsCount === 1) {
+      this._basicSideRounded({ x, y, size, context, rotation: QRDot._sideRotation(right, top, bottom) })
     }
   }
 
   _drawExtraRounded ({ x, y, size, context, getNeighbor }: DrawArgs): void {
-    const leftNeighbor = +getNeighbor(-1, 0)
-    const rightNeighbor = +getNeighbor(1, 0)
-    const topNeighbor = +getNeighbor(0, -1)
-    const bottomNeighbor = +getNeighbor(0, 1)
-
-    const neighborsCount = leftNeighbor + rightNeighbor + topNeighbor + bottomNeighbor
+    const left = +getNeighbor(-1, 0)
+    const right = +getNeighbor(1, 0)
+    const top = +getNeighbor(0, -1)
+    const bottom = +getNeighbor(0, 1)
+    const neighborsCount = left + right + top + bottom
 
     if (neighborsCount === 0) {
       this._basicDot({ x, y, size, context, rotation: 0 })
-      return
-    }
-
-    if (neighborsCount > 2 || (leftNeighbor && rightNeighbor) || (topNeighbor && bottomNeighbor)) {
+    } else if (neighborsCount > 2 || (left && right) || (top && bottom)) {
       this._basicSquare({ x, y, size, context, rotation: 0 })
-      return
-    }
-
-    if (neighborsCount === 2) {
-      let rotation = 0
-
-      if (leftNeighbor && topNeighbor) {
-        rotation = Math.PI / 2
-      } else if (topNeighbor && rightNeighbor) {
-        rotation = Math.PI
-      } else if (rightNeighbor && bottomNeighbor) {
-        rotation = -Math.PI / 2
-      }
-
-      this._basicCornerExtraRounded({ x, y, size, context, rotation })
-      return
-    }
-
-    if (neighborsCount === 1) {
-      let rotation = 0
-
-      if (topNeighbor) {
-        rotation = Math.PI / 2
-      } else if (rightNeighbor) {
-        rotation = Math.PI
-      } else if (bottomNeighbor) {
-        rotation = -Math.PI / 2
-      }
-
-      this._basicSideRounded({ x, y, size, context, rotation })
+    } else if (neighborsCount === 2) {
+      this._basicCornerExtraRounded({ x, y, size, context, rotation: QRDot._cornerRotation(left, right, top, bottom) })
+    } else if (neighborsCount === 1) {
+      this._basicSideRounded({ x, y, size, context, rotation: QRDot._sideRotation(right, top, bottom) })
     }
   }
 

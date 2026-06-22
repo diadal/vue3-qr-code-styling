@@ -1,4 +1,3 @@
-/* eslint-disable no-throw-literal */
 import calculateImageSize from '../tools/calculateImageSize'
 import errorCorrectionPercents from '../constants/errorCorrectionPercents'
 import QRDot from './QRDot'
@@ -9,6 +8,10 @@ import gradientTypes from '../constants/gradientTypes'
 import { QRCode } from '../types'
 
 type FilterFunction = (i: number, j: number) => boolean;
+type StyleOptions = {
+  color?: string;
+  gradient?: Gradient;
+};
 
 const squareMask = [
   [1, 1, 1, 1, 1, 1, 1],
@@ -36,7 +39,6 @@ export default class QRCanvas {
   _qr?: QRCode;
   _image?: HTMLImageElement;
 
-  // TODO don't pass all options to this class
   constructor (options: RequiredOptions) {
     this._canvas = document.createElement('canvas')
     this._canvas.width = options.width
@@ -141,7 +143,7 @@ export default class QRCanvas {
           additionalRotation: 0,
           x: 0,
           y: 0,
-          size: this._canvas.width > this._canvas.height ? this._canvas.width : this._canvas.height
+          size: Math.max(this._canvas.width, this._canvas.height)
         })
 
         gradientOptions.colorStops.forEach(({ offset, color }: { offset: number; color: string }) => {
@@ -158,20 +160,20 @@ export default class QRCanvas {
 
   drawDots (filter?: FilterFunction): void {
     if (!this._qr) {
-      throw 'QR code is not defined'
+      throw new Error('QR code is not defined')
     }
 
     const canvasContext = this.context
 
     if (!canvasContext) {
-      throw 'QR code is not defined'
+      throw new Error('QR code is not defined')
     }
 
     const options = this._options
     const count = this._qr.getModuleCount()
 
     if (count > options.width || count > options.height) {
-      throw 'The canvas is too small.'
+      throw new Error('The canvas is too small.')
     }
 
     const minSize = Math.min(options.width, options.height) - options.margin * 2
@@ -228,13 +230,13 @@ export default class QRCanvas {
 
   drawCorners (filter?: FilterFunction): void {
     if (!this._qr) {
-      throw 'QR code is not defined'
+      throw new Error('QR code is not defined')
     }
 
     const canvasContext = this.context
 
     if (!canvasContext) {
-      throw 'QR code is not defined'
+      throw new Error('QR code is not defined')
     }
 
     const options = this._options
@@ -245,13 +247,15 @@ export default class QRCanvas {
     const cornersSquareSize = dotSize * 7
     const cornersDotSize = dotSize * 3
     const xBeginning = Math.floor((options.width - count * dotSize) / 2)
-    const yBeginning = Math.floor((options.height - count * dotSize) / 2);
+    const yBeginning = Math.floor((options.height - count * dotSize) / 2)
 
-    [
+    const corners: [number, number, number][] = [
       [0, 0, 0],
       [1, 0, Math.PI / 2],
       [0, 1, -Math.PI / 2]
-    ].forEach(([column, row, rotation]) => {
+    ]
+
+    corners.forEach(([column, row, rotation]) => {
       if (filter && !filter(column, row)) {
         return
       }
@@ -259,102 +263,97 @@ export default class QRCanvas {
       const x = xBeginning + column * dotSize * (count - 7)
       const y = yBeginning + row * dotSize * (count - 7)
 
-      if (options.cornersSquareOptions?.type) {
-        const cornersSquare = new QRCornerSquare({ context: canvasContext, type: options.cornersSquareOptions?.type })
-
-        canvasContext.beginPath()
-        cornersSquare.draw(x, y, cornersSquareSize, rotation)
-      } else {
-        const dot = new QRDot({ context: canvasContext, type: options.dotsOptions.type })
-
-        canvasContext.beginPath()
-
-        for (let i = 0; i < squareMask.length; i++) {
-          for (let j = 0; j < squareMask[i].length; j++) {
-            if (!squareMask[i]?.[j]) {
-              continue
-            }
-
-            dot.draw(
-              x + i * dotSize,
-              y + j * dotSize,
-              dotSize,
-              (xOffset: number, yOffset: number): boolean => !!squareMask[i + xOffset]?.[j + yOffset]
-            )
-          }
-        }
-      }
-
-      if (options.cornersSquareOptions?.gradient) {
-        const gradientOptions = options.cornersSquareOptions.gradient
-        const gradient = this._createGradient({
-          context: canvasContext,
-          options: gradientOptions,
-          additionalRotation: rotation,
-          x,
-          y,
-          size: cornersSquareSize
-        })
-
-        gradientOptions.colorStops.forEach(({ offset, color }: { offset: number; color: string }) => {
-          gradient.addColorStop(offset, color)
-        })
-
-        canvasContext.fillStyle = canvasContext.strokeStyle = gradient
-      } else if (options.cornersSquareOptions?.color) {
-        canvasContext.fillStyle = canvasContext.strokeStyle = options.cornersSquareOptions.color
-      }
-
-      canvasContext.fill('evenodd')
-
-      if (options.cornersDotOptions?.type) {
-        const cornersDot = new QRCornerDot({ context: canvasContext, type: options.cornersDotOptions?.type })
-
-        canvasContext.beginPath()
-        cornersDot.draw(x + dotSize * 2, y + dotSize * 2, cornersDotSize, rotation)
-      } else {
-        const dot = new QRDot({ context: canvasContext, type: options.dotsOptions.type })
-
-        canvasContext.beginPath()
-
-        for (let i = 0; i < dotMask.length; i++) {
-          for (let j = 0; j < dotMask[i].length; j++) {
-            if (!dotMask[i]?.[j]) {
-              continue
-            }
-
-            dot.draw(
-              x + i * dotSize,
-              y + j * dotSize,
-              dotSize,
-              (xOffset: number, yOffset: number): boolean => !!dotMask[i + xOffset]?.[j + yOffset]
-            )
-          }
-        }
-      }
-
-      if (options.cornersDotOptions?.gradient) {
-        const gradientOptions = options.cornersDotOptions.gradient
-        const gradient = this._createGradient({
-          context: canvasContext,
-          options: gradientOptions,
-          additionalRotation: rotation,
-          x: x + dotSize * 2,
-          y: y + dotSize * 2,
-          size: cornersDotSize
-        })
-
-        gradientOptions.colorStops.forEach(({ offset, color }: { offset: number; color: string }) => {
-          gradient.addColorStop(offset, color)
-        })
-
-        canvasContext.fillStyle = canvasContext.strokeStyle = gradient
-      } else if (options.cornersDotOptions?.color) {
-        canvasContext.fillStyle = canvasContext.strokeStyle = options.cornersDotOptions.color
-      }
-
-      canvasContext.fill('evenodd')
+      this._drawCornerSquare(canvasContext, x, y, dotSize, cornersSquareSize, rotation)
+      this._drawCornerDot(canvasContext, x, y, dotSize, cornersDotSize, rotation)
     })
+  }
+
+  _drawCornerSquare (
+    context: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    dotSize: number,
+    size: number,
+    rotation: number
+  ): void {
+    const { cornersSquareOptions, dotsOptions } = this._options
+
+    context.beginPath()
+
+    if (cornersSquareOptions?.type) {
+      const cornersSquare = new QRCornerSquare({ context, type: cornersSquareOptions.type })
+      cornersSquare.draw(x, y, size, rotation)
+    } else {
+      const dot = new QRDot({ context, type: dotsOptions.type })
+      this._drawMask(squareMask, dot, x, y, dotSize)
+    }
+
+    this._applyStyle(context, cornersSquareOptions, { additionalRotation: rotation, x, y, size })
+    context.fill('evenodd')
+  }
+
+  _drawCornerDot (
+    context: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    dotSize: number,
+    size: number,
+    rotation: number
+  ): void {
+    const { cornersDotOptions, dotsOptions } = this._options
+
+    context.beginPath()
+
+    if (cornersDotOptions?.type) {
+      const cornersDot = new QRCornerDot({ context, type: cornersDotOptions.type })
+      cornersDot.draw(x + dotSize * 2, y + dotSize * 2, size, rotation)
+    } else {
+      const dot = new QRDot({ context, type: dotsOptions.type })
+      this._drawMask(dotMask, dot, x, y, dotSize)
+    }
+
+    this._applyStyle(context, cornersDotOptions, {
+      additionalRotation: rotation,
+      x: x + dotSize * 2,
+      y: y + dotSize * 2,
+      size
+    })
+    context.fill('evenodd')
+  }
+
+  _drawMask (mask: number[][], dot: QRDot, x: number, y: number, dotSize: number): void {
+    for (let i = 0; i < mask.length; i++) {
+      for (let j = 0; j < mask[i].length; j++) {
+        if (!mask[i]?.[j]) {
+          continue
+        }
+
+        dot.draw(
+          x + i * dotSize,
+          y + j * dotSize,
+          dotSize,
+          (xOffset: number, yOffset: number): boolean => !!mask[i + xOffset]?.[j + yOffset]
+        )
+      }
+    }
+  }
+
+  _applyStyle (
+    context: CanvasRenderingContext2D,
+    style: StyleOptions | undefined,
+    gradientArgs: { additionalRotation: number; x: number; y: number; size: number }
+  ): void {
+    if (style?.gradient) {
+      const gradient = this._createGradient({ context, options: style.gradient, ...gradientArgs })
+
+      style.gradient.colorStops.forEach(({ offset, color }: { offset: number; color: string }) => {
+        gradient.addColorStop(offset, color)
+      })
+
+      context.fillStyle = context.strokeStyle = gradient
+    } else if (style?.color) {
+      context.fillStyle = context.strokeStyle = style.color
+    }
   }
 
   loadImage (): Promise<void> {
@@ -363,7 +362,7 @@ export default class QRCanvas {
       const image = new Image()
 
       if (!options.image) {
-        return reject('Image is not defined')
+        return reject(new Error('Image is not defined'))
       }
 
       if (typeof options.imageOptions.crossOrigin === 'string') {
@@ -392,11 +391,11 @@ export default class QRCanvas {
     const canvasContext = this.context
 
     if (!canvasContext) {
-      throw 'canvasContext is not defined'
+      throw new Error('canvasContext is not defined')
     }
 
     if (!this._image) {
-      throw 'image is not defined'
+      throw new Error('image is not defined')
     }
 
     const options = this._options
@@ -407,7 +406,7 @@ export default class QRCanvas {
     const dw = width - options.imageOptions.margin * 2
     const dh = height - options.imageOptions.margin * 2
 
-    canvasContext.drawImage(this._image, dx, dy, dw < 0 ? 0 : dw, dh < 0 ? 0 : dh)
+    canvasContext.drawImage(this._image, dx, dy, Math.max(dw, 0), Math.max(dh, 0))
   }
 
   _createGradient ({

@@ -1,12 +1,11 @@
 export interface UnknownObject {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   [key: string]: any;
 }
 
 export type DotType = 'dots' | 'rounded' | 'classy' | 'classy-rounded' | 'square' | 'extra-rounded';
 export type CornerDotType = 'dot' | 'square';
 export type CornerSquareType = 'dot' | 'square' | 'extra-rounded';
-export type Extension = string;
 export type GradientType = 'radial' | 'linear';
 
 export interface DotTypes {

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { UnknownObject } from '../types'
 
 const isObject = (obj: Record<string, unknown>): boolean => !!obj && typeof obj === 'object' && !Array.isArray(obj)
@@ -15,7 +14,7 @@ export default function mergeDeep (target: UnknownObject, ...sources: UnknownObj
     if (Array.isArray(targetValue) && Array.isArray(sourceValue)) {
       target[key] = sourceValue
     } else if (isObject(targetValue) && isObject(sourceValue)) {
-      target[key] = mergeDeep(Object.assign({}, targetValue), sourceValue)
+      target[key] = mergeDeep({ ...targetValue}, sourceValue)
     } else {
       target[key] = sourceValue
     }

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import cornerSquareTypes from '../constants/cornerSquareTypes'
 import { CornerSquareType } from '../types'
 
@@ -61,10 +60,10 @@ export default class QRCornerSquare {
     const cy = y + size / 2
 
     context.translate(cx, cy)
-    rotation && context.rotate(rotation)
+    if (rotation) context.rotate(rotation)
     draw()
     context.closePath()
-    rotation && context.rotate(-rotation)
+    if (rotation) context.rotate(-rotation)
     context.translate(-cx, -cy)
   }
 

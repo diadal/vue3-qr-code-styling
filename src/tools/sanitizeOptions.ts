@@ -3,9 +3,8 @@ import { Gradient, RequiredOptions } from '../core/QROptions'
 function sanitizeGradient (gradient: Gradient): Gradient {
   const newGradient = { ...gradient }
 
-  if (!newGradient.colorStops || !newGradient.colorStops.length) {
-    // eslint-disable-next-line no-throw-literal
-    throw "Field 'colorStops' is required in gradient"
+  if (!newGradient.colorStops?.length) {
+    throw new Error("Field 'colorStops' is required in gradient")
   }
 
   if (newGradient.rotation) {

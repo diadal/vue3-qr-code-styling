@@ -4,5 +4,5 @@ export default function downloadURI (uri: string, name: string): void {
   link.href = uri
   document.body.appendChild(link)
   link.click()
-  document.body.removeChild(link)
+  link.remove()
 }

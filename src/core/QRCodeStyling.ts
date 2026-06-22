@@ -4,12 +4,12 @@ import downloadURI from '../tools/downloadURI'
 import QRCanvas from './QRCanvas'
 import defaultOptions, { Options, RequiredOptions } from './QROptions'
 import sanitizeOptions from '../tools/sanitizeOptions'
-import { Extension, QRCode } from '../types'
+import {  QRCode } from '../types'
 import qrcode from 'qrcode-generator'
 
 type DownloadOptions = {
   name?: string;
-  extension?: Extension;
+  extension?: string;
 };
 
 export default class QRCodeStyling {
@@ -38,7 +38,7 @@ export default class QRCodeStyling {
       return
     }
 
-    this._qr = <QRCode>qrcode(this._options.qrOptions.typeNumber, this._options.qrOptions.errorCorrectionLevel)
+    this._qr = qrcode(this._options.qrOptions.typeNumber, this._options.qrOptions.errorCorrectionLevel)
     this._qr.addData(this._options.data, this._options.qrOptions.mode || getMode(this._options.data))
     this._qr.make()
     this._canvas = new QRCanvas(this._options)
@@ -52,8 +52,7 @@ export default class QRCodeStyling {
     }
 
     if (typeof container.appendChild !== 'function') {
-      // eslint-disable-next-line no-throw-literal
-      throw 'Container should be a single DOM node'
+      throw new TypeError('Container should be a single DOM node')
     }
 
     if (this._canvas) {

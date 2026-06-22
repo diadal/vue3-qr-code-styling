@@ -3,7 +3,7 @@ import { Mode } from '../types'
 
 export default function getMode (data: string): Mode {
   switch (true) {
-    case /^[0-9]*$/.test(data):
+    case /^\d*$/.test(data):
       return modes.numeric
     case /^[0-9A-Z $%*+\-./:]*$/.test(data):
       return modes.alphanumeric
